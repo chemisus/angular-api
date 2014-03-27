@@ -1,11 +1,28 @@
 angular.module('Api', [])
-    .service('$api', function ($http) {
+    .service('$api', function ($http, $rootScope) {
         this.make = function (value, request) {
             var $resolved = false;
             var $errors = [];
             var $failed = false;
             var $status = null;
             var $headers = null;
+
+            var applied = false;
+
+            request.success(function (response, status, headers) {
+                $resolved = true;
+                $status = status;
+                $headers = headers;
+                $failed = false;
+            });
+
+            request.error(function (response, status, headers) {
+                $resolved = true;
+                $failed = true;
+                $status = status;
+                $errors = response;
+                $headers = headers;
+            });
 
             Object.defineProperty(value, '$resolved', {
                 enumerable: false,
@@ -55,19 +72,20 @@ angular.module('Api', [])
                 }
             });
 
-            request.success(function (response, status, headers) {
-                $resolved = true;
-                $status = status;
-                $headers = headers;
-                $failed = false;
-            });
+            Object.definePropety(value, '$apply', {
+                enumerable: false,
+                configurable: false,
+                get: function () {
+                    if (!applied) {
+                        applied = true;
 
-            request.error(function (response, status, headers) {
-                $resolved = true;
-                $failed = true;
-                $status = status;
-                $errors = response;
-                $headers = headers;
+                        request.success(function () {
+                            $rootScope.$apply();
+                        });
+                    }
+
+                    return value;
+                }
             });
         };
 
@@ -78,6 +96,8 @@ angular.module('Api', [])
 
             request.success(function (items) {
                 angular.extend(object, items);
+
+                $apply();
             });
 
             return object;
