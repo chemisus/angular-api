@@ -97,4 +97,54 @@ angular.module('Api', [])
             return array;
         };
     })
+    .service('$object', function ($api, $http) {
+        this.get = function (path, config) {
+            return $api.object($http.get(path, config));
+        };
+
+        this.post = function (path, data, config) {
+            return $api.object($http.post(path, data, config));
+        };
+
+        this.delete = function (path, config) {
+            return $api.object($http.delete(path, config));
+        };
+
+        this.head = function (path, config) {
+            return $api.object($http.head(path, config));
+        };
+
+        this.put = function (path, data, config) {
+            return $api.object($http.put(path, data, config));
+        };
+
+        this.jsonp = function (path, config) {
+            return $api.object($http.jsonp(path, config));
+        };
+    })
+    .service('$array', function ($api, $http) {
+        this.get = function (path, config) {
+            return $api.array($http.get(path, config));
+        };
+
+        this.post = function (path, data, config) {
+            return $api.array($http.post(path, data, config));
+        };
+
+        this.delete = function (path, config) {
+            return $api.array($http.delete(path, config));
+        };
+
+        this.head = function (path, config) {
+            return $api.array($http.head(path, config));
+        };
+
+        this.put = function (path, data, config) {
+            return $api.array($http.put(path, data, config));
+        };
+
+        this.jsonp = function (path, config) {
+            return $api.array($http.jsonp(path, config));
+        };
+    })
 ;

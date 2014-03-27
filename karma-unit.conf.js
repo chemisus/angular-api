@@ -7,6 +7,14 @@ module.exports = function (config) {
             'js/test/unit/**/*Test.js'
         ],
 //        basePath: '',
+        preprocessors: {
+            'js/src/**/*.js': 'coverage'
+        },
+        reporters: ['coverage', 'dots'],
+        coverageReporter: {
+            type: 'html',
+            dir: 'coverage/'
+        },
         port: 9999,
         frameworks: ['jasmine'],
         reporters: ['progress'],
