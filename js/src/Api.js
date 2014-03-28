@@ -76,19 +76,21 @@ angular.module('Api', [])
                 enumerable: false,
                 configurable: false,
                 get: function () {
-                    if (!applied) {
-                        applied = true;
+                    return function () {
+                        if (!applied) {
+                            applied = true;
 
-                        request.success(function () {
-                            $rootScope.$apply();
-                        });
+                            request.success(function () {
+                                $rootScope.$apply();
+                            });
 
-                        request.error(function () {
-                            $rootScope.$apply();
-                        });
-                    }
+                            request.error(function () {
+                                $rootScope.$apply();
+                            });
+                        }
 
-                    return function () {};
+                        return value;
+                    };
                 }
             });
         };
