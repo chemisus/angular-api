@@ -72,19 +72,25 @@ angular.module('Api', [])
                 }
             });
 
-            Object.definePropety(value, '$apply', {
+            Object.defineProperty(value, '$apply', {
                 enumerable: false,
                 configurable: false,
                 get: function () {
-                    if (!applied) {
-                        applied = true;
+                    return function () {
+                        if (!applied) {
+                            applied = true;
 
-                        request.success(function () {
-                            $rootScope.$apply();
-                        });
-                    }
+                            request.success(function () {
+                                $rootScope.$apply();
+                            });
 
-                    return value;
+                            request.error(function () {
+                                $rootScope.$apply();
+                            });
+                        }
+
+                        return value;
+                    };
                 }
             });
         };
@@ -96,8 +102,6 @@ angular.module('Api', [])
 
             request.success(function (items) {
                 angular.extend(object, items);
-
-                $apply();
             });
 
             return object;
